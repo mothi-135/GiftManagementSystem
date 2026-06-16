@@ -223,7 +223,7 @@ G --> H[Logout]
 • Record pending, withdrawn, or reissued status where allowed.
 • View limited issuance-related data
 
-# Overall Business Workflow
+# Overall Business Architecture
 
 ``` mermaid
 flowchart TD
@@ -319,5 +319,321 @@ AV --> AA
 
 
 ```
+
+
+
+
+flowchart LR
+
+%% ===================================
+%% USERS
+%% ===================================
+
+GA[Global Admin]
+HRA[HR Admin]
+HRU[HR User]
+EMP[Employee]
+ISS[Issuer]
+FAC[Facilities User]
+SEC[Security User]
+
+%% ===================================
+%% FRONTEND
+%% ===================================
+
+subgraph Frontend["React Frontend"]
+
+UI[Web Application]
+
+end
+
+%% ===================================
+%% BACKEND
+%% ===================================
+
+subgraph Backend["Node.js + Express API"]
+
+AUTH[Authentication & Authorization]
+
+USERS[User Management]
+
+MASTER[Master Data Management]
+
+EVENTS[Gift Event Management]
+
+ENROLL[Enrollment Management]
+
+ISSUANCE[Gift Issuance]
+
+INVENTORY[Inventory Management]
+
+REPORTS[Reporting & Analytics]
+
+AUDIT[Audit Trail & Logging]
+
+NOTIFY[Notification Service]
+
+end
+
+%% ===================================
+%% DATABASE
+%% ===================================
+
+subgraph Database["PostgreSQL"]
+
+DB[(Gift Management Database)]
+
+end
+
+%% ===================================
+%% EXTERNAL SERVICES
+%% ===================================
+
+subgraph ExternalServices["External Services"]
+
+QR[QR Code Generator]
+
+MAIL[Email Service]
+
+end
+
+%% ===================================
+%% USER ACCESS
+%% ===================================
+
+GA --> UI
+HRA --> UI
+HRU --> UI
+EMP --> UI
+ISS --> UI
+FAC --> UI
+SEC --> UI
+
+%% ===================================
+%% FRONTEND TO BACKEND
+%% ===================================
+
+UI --> AUTH
+
+%% ===================================
+%% BUSINESS FLOW
+%% ===================================
+
+AUTH --> USERS
+
+AUTH --> MASTER
+
+AUTH --> EVENTS
+
+AUTH --> ENROLL
+
+AUTH --> ISSUANCE
+
+AUTH --> INVENTORY
+
+AUTH --> REPORTS
+
+AUTH --> AUDIT
+
+
+%% ===================================
+%% MODULE INTERACTIONS
+%% ===================================
+
+EVENTS --> ENROLL
+
+ENROLL --> ISSUANCE
+
+ISSUANCE --> INVENTORY
+
+EVENTS --> NOTIFY
+
+ENROLL --> NOTIFY
+
+
+%% ===================================
+%% DATABASE ACCESS
+%% ===================================
+
+USERS --> DB
+
+MASTER --> DB
+
+EVENTS --> DB
+
+ENROLL --> DB
+
+ISSUANCE --> DB
+
+INVENTORY --> DB
+
+REPORTS --> DB
+
+AUDIT --> DB
+
+NOTIFY --> DB
+
+%% ===================================
+%% EXTERNAL INTEGRATIONS
+%% ===================================
+
+ENROLL --> QR
+
+NOTIFY --> MAIL
+
+
+
+# Frontend Modules (React)
+
+These are the major screens/features visible to users.
+
+1. Authentication Module
+- Login
+- Forgot Password
+- Reset Password
+- Profile
+- Change Password
+2. Dashboard Module
+
+Different dashboards based on role.
+
+- Global Admin Dashboard
+- HR Admin Dashboard
+- HR User Dashboard
+- Employee Dashboard
+- Issuer Dashboard
+- Facilities Dashboard
+- Security Dashboard
+3. User Management Module
+- Create User
+- Edit User
+- Assign Roles
+- Assign Locations
+- User Search
+- User Status Management
+4. Master Data Management Module
+- Locations
+- Departments
+- Designations
+- Grades
+- Categories
+- Units
+- Financial Years
+5. Gift Event Management Module
+- Create Event
+- Edit Event
+- View Event
+- Initiate Event
+- Close Event
+- Event History
+6. Gift Catalog Module
+- Gift Items
+- Gift Combos
+- Gift Attributes
+- Gift Images
+7. Employee Eligibility Module
+- Target Employee Selection
+- Eligibility Rules
+- Bulk Upload
+- Employee Assignment
+8. Enrollment Module
+- View Available Events
+- Enroll
+- Select Preferences
+- Withdraw Enrollment
+- Enrollment Status
+9. QR Module
+- View QR
+- Download QR
+- QR Status
+10. Gift Issuance Module
+- QR Scan Screen
+- Employee Verification
+- Issue Gift
+- Issue History
+11. Inventory Module
+- Stock Overview
+- Stock Allocation
+- Stock Adjustment
+- Stock Transactions
+12. Reports & Analytics Module
+- Enrollment Reports
+- Preference Reports
+- Issuance Reports
+- Inventory Reports
+- Location Reports
+- Export Reports
+13. Audit Trail Module
+- User Activity Logs
+- Event Logs
+- Stock Logs
+- Audit Reports
+14. Communication Module
+- Email Templates
+- Email History
+- Announcement Management
+
+# Backend Modules (Express + MVC)
+
+These are the folders inside src/modules.
+
+1. Auth Module
+- login
+- logout
+- refreshToken
+- changePassword
+- forgotPassword
+2. User Module
+- users
+- roles
+- userRoles
+- userLocations
+3. Master Data Module
+- locations
+- departments
+- designations
+- grades
+- categories
+- units
+- financialYears
+4. Employee Module
+- employees
+- employeeImport
+- employeeLookup
+5. Gift Event Module
+- giftEvents
+- giftEventItems
+- giftCombos
+6. Eligibility Module
+- targetEmployees
+- eligibilityRules
+7. Enrollment Module
+- enrollments
+- preferences
+- withdrawals
+8. QR Module
+- generateQR
+- validateQR
+- qrHistory
+9. Gift Issuance Module
+- issuance
+- reissue
+- reversal
+10. Inventory Module
+- stock
+- stockTransactions
+- stockAdjustments
+11. Notification Module
+- emails
+- announcements
+- emailLogs
+12. Reporting Module
+- enrollmentReports
+- issuanceReports
+- inventoryReports
+- auditReports
+13. Audit Module
+- auditLogs
+- applicationLogs
 
 
