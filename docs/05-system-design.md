@@ -223,7 +223,7 @@ G --> H[Logout]
 • Record pending, withdrawn, or reissued status where allowed.
 • View limited issuance-related data
 
-# Overall Business Architecture
+# Overall Business Workflow
 
 ``` mermaid
 flowchart TD
@@ -321,7 +321,10 @@ AV --> AA
 ```
 
 
+# Overall System Architecture
 
+
+``` mermaid
 
 flowchart LR
 
@@ -482,6 +485,7 @@ ENROLL --> QR
 NOTIFY --> MAIL
 
 
+```
 
 # Frontend Modules (React)
 
